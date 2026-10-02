@@ -19,6 +19,9 @@ src/Umbraco.Community.UmbraDesktop.Entertainment/
 src/Umbraco.Community.UmbraDesktop.Accessories/
   docs/                         the same, for the Accessories add-on
   StickyNotes/                  its one piece of server code, tested by .Accessories.Tests
+src/Umbraco.Community.UmbraDesktop.Multimedia/
+  docs/                         the same, for the Multimedia add-on
+  Media/                        its one piece of server code (serving .weba, .opus, .flac), tested by .Multimedia.Tests
 docs/                           UmbraDesktop's docs root (product.json)
   user/<category>/              the user guide, one page per feature
   developer/                    how it works, theming, apps, catalogues, attached windows

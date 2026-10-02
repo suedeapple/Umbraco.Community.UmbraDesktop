@@ -100,6 +100,9 @@
     "paint",
     "sticky notes",
     "calculator",
+    "media player",
+    "picture viewer",
+    "sound recorder",
     "minesweeper",
     "snake",
     "language",
@@ -192,6 +195,11 @@
       "PackageId": "Umbraco.Community.UmbraDesktop.Accessories",
       "GroupTitle": "Optional add-ons",
       "Description": "Notepad, Paint, Sticky Notes, Calculator, Disk Cleanup and the rest of Windows' Accessories for the desktop. Released from the same tag and always the same version. Entirely optional: the desktop is unchanged without it."
+    },
+    {
+      "PackageId": "Umbraco.Community.UmbraDesktop.Multimedia",
+      "GroupTitle": "Optional add-ons",
+      "Description": "Media Player, Picture Viewer and Sound Recorder for the desktop, working with the files in your media library. Released from the same tag and always the same version. Entirely optional: the desktop is unchanged without it."
     },
     {
       "PackageId": "Umbraco.Community.UmbraDesktop.Entertainment",

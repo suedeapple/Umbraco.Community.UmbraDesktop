@@ -1,0 +1,52 @@
+/**
+ * Dutch (nl) strings for the `umbraDesktopMultimedia` area. Same keys as `en.ts`, same reasons.
+ *
+ * The app names are the ones the Dutch Windows shipped where it translated them: Geluidsrecorder was,
+ * Media Player never was, and the picture viewer was Windows Fotoviewer. A person looks for a tool by
+ * the name their own Windows gave it.
+ */
+export default {
+  umbraDesktopMultimedia: {
+    groupMultimedia: 'Multimedia',
+    mediaplayer: 'Media Player',
+    pictureviewer: 'Fotoviewer',
+    soundrecorder: 'Geluidsrecorder',
+    open: 'Openen…',
+    openTitle: 'Openen uit de mediabibliotheek (Ctrl+O)',
+    openFailed: '%0% kon niet worden geopend.',
+    playerPlay: 'Afspelen',
+    playerPause: 'Pauzeren',
+    playerStop: 'Stoppen',
+    playerMute: 'Dempen',
+    playerVolume: 'Volume',
+    playerSeek: 'Positie',
+    playerFullScreen: 'Volledig scherm',
+    playerEmpty: 'Kies Openen… om geluid of video uit de mediabibliotheek af te spelen.',
+    playerNotMedia: 'Media Player speelt geluid en video af, en %0% is geen van beide.',
+    playerCannotPlay: '%0% kan in deze browser niet worden afgespeeld.',
+    viewerPrevious: 'Vorige afbeelding',
+    viewerNext: 'Volgende afbeelding',
+    viewerSlideshow: 'Diavoorstelling',
+    viewerZoomIn: 'Inzoomen',
+    viewerZoomOut: 'Uitzoomen',
+    viewerActualSize: 'Werkelijke grootte',
+    viewerFit: 'Aanpassen aan venster',
+    viewerPosition: '%0% van %1%',
+    viewerEmpty: 'Kies Openen… om de afbeeldingen in een mediamap te bekijken.',
+    viewerNotPicture: 'Fotoviewer toont afbeeldingen, en %0% is er geen.',
+    viewerCannotShow: '%0% kon niet worden weergegeven.',
+    recorderRecord: 'Opnemen',
+    recorderLive: 'Opname',
+    recorderRecording: 'Opname',
+    recorderName: 'Naam',
+    recorderDownload: 'Downloaden',
+    recorderAdd: 'Toevoegen aan Media',
+    recorderAdded: 'Toegevoegd aan de mediabibliotheek.',
+    recorderNotAdded: 'Niet toegevoegd. %0%',
+    recorderLimit: 'Opname gestopt bij de limiet van %0%.',
+    recorderDenied: 'De microfoon is niet toegestaan. Sta hem toe voor deze site in de browser en kies daarna opnieuw Opnemen.',
+    recorderMissing: 'Er is geen microfoon gevonden.',
+    recorderInsecure: 'De browser staat opnemen alleen toe als de backoffice via HTTPS draait.',
+    recorderUnavailable: 'De microfoon kon niet worden gestart. Mogelijk gebruikt een ander programma hem.',
+  },
+};

@@ -29,6 +29,7 @@ runs:
           src/Umbraco.Community.UmbraDesktop/package-lock.json
           src/Umbraco.Community.UmbraDesktop.Entertainment/package-lock.json
           src/Umbraco.Community.UmbraDesktop.Accessories/package-lock.json
+          src/Umbraco.Community.UmbraDesktop.Multimedia/package-lock.json
 
     # Safe to key on the lock files because RestorePackagesWithLockFile is on repo-wide
     # (src/Directory.Build.props), so every packages.lock.json is committed and exact. They
@@ -39,7 +40,7 @@ runs:
       uses: actions/cache@v4
       with:
         path: ~/.nuget/packages
-        key: nuget-${{ runner.os }}-${{ hashFiles('src/Umbraco.Community.UmbraDesktop/packages.lock.json', 'src/Umbraco.Community.UmbraDesktop.Entertainment/packages.lock.json', 'src/Umbraco.Community.UmbraDesktop.Accessories/packages.lock.json', 'src/Umbraco.Community.UmbraDesktop.Tests/packages.lock.json', 'src/Umbraco.Community.UmbraDesktop.Accessories.Tests/packages.lock.json') }}
+        key: nuget-${{ runner.os }}-${{ hashFiles('src/Umbraco.Community.UmbraDesktop/packages.lock.json', 'src/Umbraco.Community.UmbraDesktop.Entertainment/packages.lock.json', 'src/Umbraco.Community.UmbraDesktop.Accessories/packages.lock.json', 'src/Umbraco.Community.UmbraDesktop.Multimedia/packages.lock.json', 'src/Umbraco.Community.UmbraDesktop.Tests/packages.lock.json', 'src/Umbraco.Community.UmbraDesktop.Accessories.Tests/packages.lock.json', 'src/Umbraco.Community.UmbraDesktop.Multimedia.Tests/packages.lock.json') }}
         restore-keys: nuget-${{ runner.os }}-
 
     # Per project rather than by solution, and deliberately. The solution also holds the test
@@ -56,6 +57,8 @@ runs:
         dotnet restore src/Umbraco.Community.UmbraDesktop.Entertainment/Umbraco.Community.UmbraDesktop.Entertainment.csproj
         dotnet restore src/Umbraco.Community.UmbraDesktop.Accessories/Umbraco.Community.UmbraDesktop.Accessories.csproj
         dotnet restore src/Umbraco.Community.UmbraDesktop.Accessories.Tests/Umbraco.Community.UmbraDesktop.Accessories.Tests.csproj
+        dotnet restore src/Umbraco.Community.UmbraDesktop.Multimedia/Umbraco.Community.UmbraDesktop.Multimedia.csproj
+        dotnet restore src/Umbraco.Community.UmbraDesktop.Multimedia.Tests/Umbraco.Community.UmbraDesktop.Multimedia.Tests.csproj
 
     - name: Install frontend dependencies
       shell: bash
@@ -63,6 +66,7 @@ runs:
         (cd src/Umbraco.Community.UmbraDesktop && npm ci)
         (cd src/Umbraco.Community.UmbraDesktop.Entertainment && npm ci)
         (cd src/Umbraco.Community.UmbraDesktop.Accessories && npm ci)
+        (cd src/Umbraco.Community.UmbraDesktop.Multimedia && npm ci)
 
     - name: Test frontend
       shell: bash
@@ -70,6 +74,7 @@ runs:
         (cd src/Umbraco.Community.UmbraDesktop && npm test)
         (cd src/Umbraco.Community.UmbraDesktop.Entertainment && npm test)
         (cd src/Umbraco.Community.UmbraDesktop.Accessories && npm test)
+        (cd src/Umbraco.Community.UmbraDesktop.Multimedia && npm test)
 
     # Must run before dotnet build/pack: wwwroot/App_Plugins is gitignored, so a clean checkout
     # would otherwise pack a package with no frontend in it at all.
@@ -79,6 +84,7 @@ runs:
         (cd src/Umbraco.Community.UmbraDesktop && npm run build)
         (cd src/Umbraco.Community.UmbraDesktop.Entertainment && npm run build)
         (cd src/Umbraco.Community.UmbraDesktop.Accessories && npm run build)
+        (cd src/Umbraco.Community.UmbraDesktop.Multimedia && npm run build)
 
     - name: Build
       shell: bash
@@ -86,6 +92,7 @@ runs:
         dotnet build src/Umbraco.Community.UmbraDesktop/ --configuration Release --no-restore
         dotnet build src/Umbraco.Community.UmbraDesktop.Entertainment/ --configuration Release --no-restore
         dotnet build src/Umbraco.Community.UmbraDesktop.Accessories/ --configuration Release --no-restore
+        dotnet build src/Umbraco.Community.UmbraDesktop.Multimedia/ --configuration Release --no-restore
 
     # Named by project file, never by directory or solution: a path that matches no project makes
     # `dotnet test` report success while running nothing.
@@ -94,6 +101,7 @@ runs:
       run: |
         dotnet test src/Umbraco.Community.UmbraDesktop.Tests/Umbraco.Community.UmbraDesktop.Tests.csproj --configuration Release --no-restore
         dotnet test src/Umbraco.Community.UmbraDesktop.Accessories.Tests/Umbraco.Community.UmbraDesktop.Accessories.Tests.csproj --configuration Release --no-restore
+        dotnet test src/Umbraco.Community.UmbraDesktop.Multimedia.Tests/Umbraco.Community.UmbraDesktop.Multimedia.Tests.csproj --configuration Release --no-restore
 
     # Every package, every release, changed or not: they share a version off one tag, and matching
     # versions are the compatibility answer instead of a matrix somebody has to maintain
@@ -104,6 +112,7 @@ runs:
         dotnet pack src/Umbraco.Community.UmbraDesktop/ --configuration Release --no-build --output "${{ inputs.output }}"
         dotnet pack src/Umbraco.Community.UmbraDesktop.Entertainment/ --configuration Release --no-build --output "${{ inputs.output }}"
         dotnet pack src/Umbraco.Community.UmbraDesktop.Accessories/ --configuration Release --no-build --output "${{ inputs.output }}"
+        dotnet pack src/Umbraco.Community.UmbraDesktop.Multimedia/ --configuration Release --no-build --output "${{ inputs.output }}"
 
     # A package that installs cleanly and does nothing is this repository's worst failure mode, and
     # it looks identical to success everywhere else. In the release workflow this is also the last

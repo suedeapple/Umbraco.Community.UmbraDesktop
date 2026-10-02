@@ -1,0 +1,14 @@
+{
+	"$schema": "../../umbraco-package-schema.json",
+	"id": "Umbraco.Community.UmbraDesktop.Multimedia",
+	"name": "UmbraDesktop Multimedia",
+	"version": "GetsGenerated",
+	"extensions": [
+		{
+			"type": "bundle",
+			"alias": "Umbraco.Community.UmbraDesktop.Multimedia.Bundle",
+			"name": "UmbraDesktop Multimedia Bundle",
+			"js": "/App_Plugins/Umbraco.Community.UmbraDesktop.Multimedia/umbradesktop-multimedia.js"
+		}
+	]
+}

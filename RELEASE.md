@@ -5,19 +5,21 @@ Repo-specific facts a generic checklist cannot know. Read this first, then work 
 
 ## What ships
 
-Three packages, from **one tag**, always at the **same version**:
+Four packages, from **one tag**, always at the **same version**:
 
 | Package | What it is |
 |---|---|
 | `Umbraco.Community.UmbraDesktop` | The desktop. The product. |
 | `Umbraco.Community.UmbraDesktop.Entertainment` | Optional games add-on. |
 | `Umbraco.Community.UmbraDesktop.Accessories` | Optional tools add-on. Notepad, Paint, Sticky Notes, Calculator, Character Map, Clock, Screen Saver, Disk Cleanup and System Information. It has server-side code of its own (the Sticky Notes API) and a C# test project beside it. |
+| `Umbraco.Community.UmbraDesktop.Multimedia` | Optional media add-on. Media Player, Picture Viewer and Sound Recorder. Its one piece of server code teaches the site to serve the sound formats Umbraco accepts and ASP.NET Core does not (`.weba`, `.opus`, `.flac`), with a C# test project beside it. |
 
 Lockstep is a decision, not an accident: design D13 in
 [`docs/design/2026-09-06-desktop-apps-design.md`](docs/design/2026-09-06-desktop-apps-design.md)
-§8.3, and Accessories follows it unchanged
-([`docs/design/2026-09-24-accessories-design.md`](docs/design/2026-09-24-accessories-design.md)).
-All three publish on **every** release, changed or not — a gap in an add-on's version history
+§8.3, and Accessories and Multimedia follow it unchanged
+([`docs/design/2026-09-24-accessories-design.md`](docs/design/2026-09-24-accessories-design.md),
+[`docs/design/2026-10-02-multimedia-design.md`](docs/design/2026-10-02-multimedia-design.md)).
+All four publish on **every** release, changed or not — a gap in an add-on's version history
 reads like a broken pipeline, where a version with no changes reads like Umbraco.
 
 **Every add-on requires this release of the host, or any later 17.** Each add-on references the
@@ -189,6 +191,7 @@ serving several packages suffixes the file with the **lowercased package ID**:
 - `umbraco-marketplace-umbraco.community.umbradesktop.json` — the host.
 - `umbraco-marketplace-umbraco.community.umbradesktop.entertainment.json` — the games add-on.
 - `umbraco-marketplace-umbraco.community.umbradesktop.accessories.json` — the tools add-on.
+- `umbraco-marketplace-umbraco.community.umbradesktop.multimedia.json` — the media add-on.
 
 **Both are suffixed, deliberately.** An unsuffixed `umbraco-marketplace.json` is observed to keep
 serving the package that has no suffixed file of its own, and the host shipped that way for
@@ -216,7 +219,9 @@ it reaches `Umbraco.Cms.Core` transitively through the host. That is documented 
 has not been observed for that package yet, so **check its listing appears and shows v17 after its
 first stable release**. If it does not, a direct `Umbraco.Cms.Core` reference is the fix.
 Accessories references `Umbraco.Cms.Api.Management` and `Umbraco.Cms.Api.Common` directly, for its
-Sticky Notes API, so it meets the rule either way.
+Sticky Notes API, so it meets the rule either way. Multimedia is in Entertainment's position: it
+reaches `Umbraco.Cms.Core` only through the host, so **check its listing too after its first stable
+release**.
 
 Note *stable*, not *first publish*: the Marketplace appears to track only stable versions, so a
 package whose only published version is a prerelease has nothing for it to list. `17.1.0-rc.1`
