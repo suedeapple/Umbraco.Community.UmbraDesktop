@@ -86,23 +86,35 @@ export interface ItemUrl {
 }
 
 /**
- * The pictures among a folder's children, in the folder's own order.
+ * The files of one kind among a folder's children, in the folder's own order.
  *
  * The order is the Media section's, so Next goes where the person expects from having looked at the
- * folder there. A subfolder, a document, an item in the recycle bin and an item with no file are
- * left out. The URLs come in whatever order the server returns them, so they are matched by key.
+ * folder there. A subfolder, an item in the recycle bin, an item with no file and every file of
+ * another kind are left out. The URLs come in whatever order the server returns them, so they are
+ * matched by key.
+ * @param items The folder's children, in order.
+ * @param urls Their URLs.
+ * @param kind Which files to keep: Picture Viewer's pictures, CD Player's sound.
+ * @returns The files.
+ */
+export function filesIn(items: FolderItem[], urls: ItemUrl[], kind: MediaKind): MediaFile[] {
+  const urlOf = new Map(urls.map((entry) => [entry.unique, entry.url]));
+  const files: MediaFile[] = [];
+  for (const item of items) {
+    const url = urlOf.get(item.unique);
+    if (item.isTrashed || item.hasChildren || !url) continue;
+    const extension = extensionOf(url);
+    if (kindOf(extension) === kind) files.push({ unique: item.unique, name: item.name, url, extension });
+  }
+  return files;
+}
+
+/**
+ * The pictures among a folder's children, in the folder's own order: {@link filesIn} for pictures.
  * @param items The folder's children, in order.
  * @param urls Their URLs.
  * @returns The pictures.
  */
 export function picturesIn(items: FolderItem[], urls: ItemUrl[]): MediaFile[] {
-  const urlOf = new Map(urls.map((entry) => [entry.unique, entry.url]));
-  const pictures: MediaFile[] = [];
-  for (const item of items) {
-    const url = urlOf.get(item.unique);
-    if (item.isTrashed || item.hasChildren || !url) continue;
-    const extension = extensionOf(url);
-    if (kindOf(extension) === 'image') pictures.push({ unique: item.unique, name: item.name, url, extension });
-  }
-  return pictures;
+  return filesIn(items, urls, 'image');
 }

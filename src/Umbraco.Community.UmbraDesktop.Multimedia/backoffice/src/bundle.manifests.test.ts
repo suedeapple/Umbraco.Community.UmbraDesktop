@@ -1,5 +1,6 @@
 import { expect } from '@open-wc/testing';
 import { manifests } from './bundle.manifests.js';
+import { CD_CONTENT_SIZE, CD_MIN_CONTENT_SIZE } from './cd-player/constants.js';
 import { PLAYER_CONTENT_SIZE, PLAYER_MIN_CONTENT_SIZE } from './media-player/constants.js';
 import { VIEWER_CONTENT_SIZE, VIEWER_MIN_CONTENT_SIZE } from './picture-viewer/constants.js';
 import { RECORDER_CONTENT_SIZE, RECORDER_MIN_CONTENT_SIZE } from './sound-recorder/constants.js';
@@ -31,6 +32,7 @@ const apps = manifests.filter((manifest) => manifest.type === 'umbraDesktopApp')
 /** Each app's name and the sizes its constants derive, in launcher order. */
 const EXPECTED = [
   ['MediaPlayer', PLAYER_CONTENT_SIZE, PLAYER_MIN_CONTENT_SIZE],
+  ['CDPlayer', CD_CONTENT_SIZE, CD_MIN_CONTENT_SIZE],
   ['PictureViewer', VIEWER_CONTENT_SIZE, VIEWER_MIN_CONTENT_SIZE],
   ['SoundRecorder', RECORDER_CONTENT_SIZE, RECORDER_MIN_CONTENT_SIZE],
   ['VolumeControl', VOLUME_CONTENT_SIZE, VOLUME_MIN_CONTENT_SIZE],

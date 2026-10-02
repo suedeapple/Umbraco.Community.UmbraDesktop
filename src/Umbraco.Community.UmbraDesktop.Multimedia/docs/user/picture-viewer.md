@@ -2,7 +2,7 @@
 id: picture-viewer
 title: Picture Viewer
 description: Look through the pictures in a media folder, one by one or as a slideshow, and zoom in on them.
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 # Picture Viewer

@@ -69,5 +69,16 @@ export default {
     // Volume Control.
     volumeMaster: 'Volume',
     volumeMute: 'Mute',
+    // CD Player.
+    cdEmpty: 'Select Open… to play a media folder of sound files, or one track and the rest of its folder.',
+    cdNotSound: 'CD Player plays sound files, and %0% is not one.',
+    cdNoSound: '%0% has no sound files in it.',
+    cdPrevious: 'Previous track',
+    cdNext: 'Next track',
+    cdShuffle: 'Shuffle',
+    cdRepeatOff: 'Repeat: off',
+    cdRepeatAll: 'Repeat: all',
+    cdRepeatOne: 'Repeat: one',
+    cdTracks: 'Tracks',
   },
 };

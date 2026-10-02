@@ -2,7 +2,7 @@
 id: sound-recorder
 title: Sound Recorder
 description: Record a clip with the microphone, play it back, and download it or add it to the media library.
-sidebar_position: 4
+sidebar_position: 5
 ---
 
 # Sound Recorder

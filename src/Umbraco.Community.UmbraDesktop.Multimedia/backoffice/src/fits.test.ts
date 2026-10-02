@@ -1,5 +1,6 @@
 import { expect, fixture, html } from '@open-wc/testing';
 import { manifests } from './bundle.manifests.js';
+import './cd-player/cd-player.element.js';
 import './media-player/media-player.element.js';
 import './picture-viewer/picture-viewer.element.js';
 import './sound-recorder/sound-recorder.element.js';
@@ -25,6 +26,7 @@ import './volume-control/volume-control.element.js';
 /** Each app's tag, by its manifest `name`. */
 const TAGS: Record<string, string> = {
   MediaPlayer: 'umbradesktop-media-player',
+  CDPlayer: 'umbradesktop-cd-player',
   PictureViewer: 'umbradesktop-picture-viewer',
   SoundRecorder: 'umbradesktop-sound-recorder',
   VolumeControl: 'umbradesktop-volume-control',

@@ -1,3 +1,4 @@
+import { CD_CONTENT_SIZE, CD_MIN_CONTENT_SIZE } from './cd-player/constants.js';
 import { PLAYER_CONTENT_SIZE, PLAYER_MIN_CONTENT_SIZE } from './media-player/constants.js';
 import { VIEWER_CONTENT_SIZE, VIEWER_MIN_CONTENT_SIZE } from './picture-viewer/constants.js';
 import { RECORDER_CONTENT_SIZE, RECORDER_MIN_CONTENT_SIZE } from './sound-recorder/constants.js';
@@ -96,6 +97,8 @@ const apps: Array<UmbExtensionManifest> = [
     PLAYER_CONTENT_SIZE,
     PLAYER_MIN_CONTENT_SIZE,
   ),
+  // A media folder of sound files as a disc, played track by track.
+  app('CDPlayer', 950, 'icon-record', () => import('./cd-player/cd-player.element.js'), CD_CONTENT_SIZE, CD_MIN_CONTENT_SIZE),
   app(
     'PictureViewer',
     900,

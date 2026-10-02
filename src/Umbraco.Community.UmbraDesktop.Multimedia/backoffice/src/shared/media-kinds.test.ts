@@ -1,5 +1,5 @@
 import { expect } from '@open-wc/testing';
-import { extensionOf, kindOf, picturesIn } from './media-kinds.js';
+import { extensionOf, filesIn, kindOf, picturesIn } from './media-kinds.js';
 
 /**
  * Which media files each app opens, decided from the file alone, since the media picker cannot be
@@ -55,4 +55,21 @@ it('lists the pictures in a folder, in its order, and nothing else', () => {
     { unique: 'a', name: 'Beach', url: '/media/a/beach.jpg?rnd=1', extension: 'jpg' },
     { unique: 'd', name: 'Logo', url: '/media/d/logo.svg', extension: 'svg' },
   ]);
+});
+
+/** CD Player's disc is the same listing for sound: a folder's sound files, in its order, nothing else. */
+it('lists the sound files in a folder, in its order, and nothing else', () => {
+  const items = [
+    { unique: 'a', name: 'Intro', isTrashed: false, hasChildren: false },
+    { unique: 'b', name: 'Cover', isTrashed: false, hasChildren: false },
+    { unique: 'c', name: 'Outro', isTrashed: false, hasChildren: false },
+    { unique: 'd', name: 'Trailer', isTrashed: false, hasChildren: false },
+  ];
+  const urls = [
+    { unique: 'a', url: '/media/a/intro.mp3' },
+    { unique: 'b', url: '/media/b/cover.jpg' },
+    { unique: 'c', url: '/media/c/outro.weba' },
+    { unique: 'd', url: '/media/d/trailer.mp4' },
+  ];
+  expect(filesIn(items, urls, 'audio').map((file) => file.name)).to.deep.equal(['Intro', 'Outro']);
 });

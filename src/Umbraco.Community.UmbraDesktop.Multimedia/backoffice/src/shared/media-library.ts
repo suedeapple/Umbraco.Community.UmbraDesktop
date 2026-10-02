@@ -1,5 +1,5 @@
-import { extensionOf, picturesIn } from './media-kinds.js';
-import type { MediaFile } from './media-kinds.js';
+import { extensionOf, filesIn } from './media-kinds.js';
+import type { MediaFile, MediaKind } from './media-kinds.js';
 import type { UmbControllerHost } from '@umbraco-cms/backoffice/controller-api';
 import {
   UMB_MEDIA_ENTITY_TYPE,
@@ -97,11 +97,15 @@ export function createMediaPicker(host: UmbControllerHost): MediaPicker {
 }
 
 /**
- * The pictures in one media folder, in the Media section's order.
+ * The files of one kind in a media folder, in the Media section's order: Picture Viewer's pictures,
+ * CD Player's sound.
  * @param folder The folder's key, or null for the media library root.
- * @returns The pictures.
+ * @returns The files.
  */
-export type FolderPictures = (folder: string | null) => Promise<MediaFile[]>;
+export type FolderFiles = (folder: string | null) => Promise<MediaFile[]>;
+
+/** The pictures in one media folder: a {@link FolderFiles} for pictures, by its old name. */
+export type FolderPictures = FolderFiles;
 
 /**
  * How many of a folder's items are read. A folder with more than this still opens; Previous and
@@ -116,9 +120,10 @@ export const FOLDER_LIMIT = 1000;
  * what every media start node and permission is already applied to, and its order is the order the
  * person sees.
  * @param host The element asking.
- * @returns A {@link FolderPictures}.
+ * @param kind Which files to keep.
+ * @returns A {@link FolderFiles}.
  */
-export function createFolderPictures(host: UmbControllerHost): FolderPictures {
+export function createFolderFiles(host: UmbControllerHost, kind: MediaKind): FolderFiles {
   return async (folder) => {
     const tree = new UmbMediaTreeRepository(host);
     const paging = { skip: 0, take: FOLDER_LIMIT };
@@ -134,6 +139,15 @@ export function createFolderPictures(host: UmbControllerHost): FolderPictures {
     const files = items.filter((item) => !item.hasChildren && !item.isTrashed).map((item) => item.unique);
     if (!files.length) return [];
     const { data: urls } = await new UmbMediaUrlRepository(host).requestItems(files);
-    return picturesIn(items, urls ?? []);
+    return filesIn(items, urls ?? [], kind);
   };
+}
+
+/**
+ * The pictures in a folder, for Picture Viewer.
+ * @param host The element asking.
+ * @returns A {@link FolderPictures}.
+ */
+export function createFolderPictures(host: UmbControllerHost): FolderPictures {
+  return createFolderFiles(host, 'image');
 }
