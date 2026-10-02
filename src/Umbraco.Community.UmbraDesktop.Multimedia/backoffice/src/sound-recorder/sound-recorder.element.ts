@@ -7,11 +7,14 @@ import type { MediaAdder } from '../shared/media-save.js';
 import { createSaveFolderPicker } from '../shared/save-location.js';
 import type { SaveFolderPicker } from '../shared/save-location.js';
 import { formatTime } from '../media-player/time.js';
+import { mixer as sharedMixer } from '../shared/mixer.js';
+import type { ChannelLevel, Mixer } from '../shared/mixer.js';
 import { RECORDER_BAR_HEIGHT_PX, RECORDER_MAX_SECONDS, RECORDER_MIN_WAVE_HEIGHT_PX, RECORDER_PADDING_PX } from './constants.js';
 import { fileNameFor, recordingName } from './format.js';
 import { MicrophoneError, openMicrophone } from './microphone.js';
 import type { Microphone, MicrophoneProblem, MicrophoneSession, Recording } from './microphone.js';
 import { css, customElement, html, nothing, property, state } from '@umbraco-cms/backoffice/external/lit';
+import type { PropertyValues } from '@umbraco-cms/backoffice/external/lit';
 import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
 import { UMB_DISCARD_CHANGES_MODAL, umbOpenModal } from '@umbraco-cms/backoffice/modal';
 
@@ -65,6 +68,9 @@ function saveToDownloads(blob: Blob, name: string): void {
  * does; a recording is only ever added, never saved back over an item, so a kept recording is not
  * added a second time.
  *
+ * Playback goes through the Sound Recorder column of the desktop's mixer (`shared/mixer.ts`), so
+ * Volume Control turns it down or mutes it with everything else.
+ *
  * The trace is drawn live from an analyser on the microphone while recording: the green line on
  * black Windows' Sound Recorder drew.
  */
@@ -89,6 +95,17 @@ export class SoundRecorderElement extends UmbLitElement {
   /** Asks which folder a recording goes in. Umbraco's folder picker unless a test says otherwise. */
   @property({ attribute: false })
   pickSaveFolder?: SaveFolderPicker;
+
+  /** The mixer playback goes through. The desktop's one mixer unless a test says otherwise. */
+  @property({ attribute: false })
+  mixer: Mixer = sharedMixer;
+
+  /** What playback plays at: the Sound Recorder column under the master. */
+  @state()
+  private _level: ChannelLevel = { volume: 1, muted: false };
+
+  /** Stops listening to the mixer. Set while connected. */
+  #unsubscribe?: () => void;
 
   /**
    * Ask whether a recording that was not kept may be thrown away. Umbraco's own discard-changes
@@ -171,6 +188,22 @@ export class SoundRecorderElement extends UmbLitElement {
   override connectedCallback(): void {
     super.connectedCallback();
     this.addEventListener('mousedown', keepFocusOnPress);
+    this.#listen();
+  }
+
+  /**
+   * Listen to whichever mixer it was given, again if it is given another.
+   * @param changed What changed since the last update.
+   */
+  override willUpdate(changed: PropertyValues<this>): void {
+    if (changed.has('mixer') && this.isConnected) this.#listen();
+  }
+
+  /** Start listening to the mixer, and read it now. */
+  #listen(): void {
+    this.#unsubscribe?.();
+    this.#unsubscribe = this.mixer.subscribe(() => (this._level = this.mixer.effective('soundrecorder')));
+    this._level = this.mixer.effective('soundrecorder');
   }
 
   /**
@@ -185,15 +218,20 @@ export class SoundRecorderElement extends UmbLitElement {
     }
     this.#stopTimers();
     this.shadowRoot?.querySelector('audio')?.pause();
+    this.#unsubscribe?.();
+    this.#unsubscribe = undefined;
     super.disconnectedCallback();
   }
 
   /**
-   * Mirror the unsaved state onto the host as the desktop's unsaved-work attribute, and draw the
-   * trace flat whenever nothing is recording.
+   * Mirror the unsaved state onto the host as the desktop's unsaved-work attribute, give playback
+   * the mixer's level, and draw the trace flat whenever nothing is recording.
    */
   override updated(): void {
     this.toggleAttribute(UNSAVED_ATTRIBUTE, this.dirty);
+    const audio = this.shadowRoot?.querySelector('audio');
+    if (audio && audio.volume !== this._level.volume) audio.volume = this._level.volume;
+    if (audio && audio.muted !== this._level.muted) audio.muted = this._level.muted;
     if (this._state !== 'recording') this.#draw(undefined);
   }
 

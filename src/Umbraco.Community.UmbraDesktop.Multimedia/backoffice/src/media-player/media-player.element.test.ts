@@ -3,6 +3,7 @@ import { sendKeys, sendMouse } from '@web/test-runner-commands';
 import './media-player.element.js';
 import type { MediaPlayerElement } from './media-player.element.js';
 import type { MediaPickResult } from '../shared/media-library.js';
+import { Mixer } from '../shared/mixer.js';
 
 /**
  * Media Player over a fake media library and a real media element.
@@ -51,7 +52,19 @@ function picked(name: string, extension: string, url = silence(2)): MediaPickRes
  * @returns The element.
  */
 async function player(...answers: MediaPickResult[]): Promise<MediaPlayerElement> {
+  return await playerWith(new Mixer(), ...answers);
+}
+
+/**
+ * A mounted Media Player on a given mixer: a fresh one with no storage for each test, so no test
+ * hears another's volume.
+ * @param mixer The mixer it plays through.
+ * @param answers What each Open finds.
+ * @returns The element.
+ */
+async function playerWith(mixer: Mixer, ...answers: MediaPickResult[]): Promise<MediaPlayerElement> {
   return await fixture<MediaPlayerElement>(html`<umbradesktop-media-player
+    .mixer=${mixer}
     .pickMedia=${async () => answers.shift() ?? { status: 'cancelled' }}
   ></umbradesktop-media-player>`);
 }
@@ -215,6 +228,41 @@ it('mutes and sets the volume', async () => {
   volume.value = '0.25';
   volume.dispatchEvent(new Event('input', { bubbles: true }));
   await until(element, () => media(element).volume === 0.25);
+});
+
+/**
+ * Media Player's volume and mute are its column in Volume Control, and the master column turns it
+ * down or mutes it on top: one mixer for the whole desktop, not a second volume that disagrees.
+ */
+it('plays through the mixer: its own column, under the master', async () => {
+  const mixer = new Mixer();
+  const element = await playerWith(mixer, picked('Jingle', 'wav'));
+  await open(element);
+  const volume = control(element, 'volume') as HTMLInputElement;
+  volume.value = '0.5';
+  volume.dispatchEvent(new Event('input', { bubbles: true }));
+  expect(mixer.get('mediaplayer').volume, 'the slider is the mixer column').to.equal(0.5);
+  mixer.set('master', { volume: 0.5 });
+  await until(element, () => media(element).volume === 0.25);
+  mixer.set('master', { muted: true });
+  await until(element, () => media(element).muted);
+  expect(control(element, 'mute').getAttribute('aria-pressed'), 'its own column is not muted').to.equal('false');
+  mixer.set('master', { muted: false });
+  mixer.set('mediaplayer', { volume: 0.8 });
+  await until(element, () => !media(element).muted && Math.abs(media(element).volume - 0.4) < 1e-9);
+  expect(Number((control(element, 'volume') as HTMLInputElement).value), 'a change in Volume Control moves the slider').to.equal(0.8);
+});
+
+/** A window that is closed stops listening to the mixer. */
+it('stops listening to the mixer when its window closes', async () => {
+  const mixer = new Mixer();
+  const element = await playerWith(mixer, picked('Jingle', 'wav'));
+  await open(element);
+  const video = media(element);
+  element.remove();
+  mixer.set('master', { volume: 0.1 });
+  await new Promise((resolve) => setTimeout(resolve, 50));
+  expect(video.volume).to.equal(1);
 });
 
 /**

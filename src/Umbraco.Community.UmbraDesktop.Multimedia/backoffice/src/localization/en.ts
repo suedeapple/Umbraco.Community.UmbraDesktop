@@ -18,6 +18,12 @@ export default {
     mediaplayer: 'Media Player',
     pictureviewer: 'Picture Viewer',
     soundrecorder: 'Sound Recorder',
+    volumecontrol: 'Volume Control',
+    cdplayer: 'CD Player',
+    mediainfo: 'Media Info',
+    photoeditor: 'Photo Editor',
+    camera: 'Camera',
+    snippingtool: 'Snipping Tool',
     // Shared by the apps that open a file.
     open: 'Open…',
     openTitle: 'Open from the media library (Ctrl+O)',
@@ -60,5 +66,8 @@ export default {
     recorderMissing: 'No microphone was found.',
     recorderInsecure: 'The browser only allows recording when the backoffice is on HTTPS.',
     recorderUnavailable: 'The microphone could not be started. It may be in use by another program.',
+    // Volume Control.
+    volumeMaster: 'Volume',
+    volumeMute: 'Mute',
   },
 };

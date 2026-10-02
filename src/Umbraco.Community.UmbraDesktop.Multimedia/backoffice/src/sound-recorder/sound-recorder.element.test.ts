@@ -6,6 +6,7 @@ import { MicrophoneError } from './microphone.js';
 import type { MicrophoneProblem, MicrophoneSession } from './microphone.js';
 import type { MediaAddRequest, MediaAddResult } from '../shared/media-save.js';
 import type { SaveFolderChoice } from '../shared/save-location.js';
+import { Mixer } from '../shared/mixer.js';
 
 /**
  * Sound Recorder over a fake microphone and a fake media library.
@@ -69,6 +70,8 @@ interface Fakes {
   discard?: boolean;
   /** The longest recording, in seconds. */
   maxSeconds?: number;
+  /** The mixer it plays back through. A fresh one unless a test needs to reach it. */
+  mixer?: Mixer;
 }
 
 /**
@@ -90,6 +93,7 @@ async function recorder(fakes: Fakes = {}): Promise<{ element: SoundRecorderElem
   const element = await fixture<SoundRecorderElement>(html`<umbradesktop-sound-recorder
     .microphone=${microphone}
     .maxSeconds=${fakes.maxSeconds ?? 600}
+    .mixer=${fakes.mixer ?? new Mixer()}
     .download=${(blob: Blob, name: string) => recorded.downloads.push({ blob, name })}
     .addToMedia=${async (request: MediaAddRequest) => {
       recorded.adds.push(request);
@@ -292,4 +296,17 @@ it('plays the recording back, and stops it', async () => {
   await until(element, () => text(element, '.time').startsWith('0:01 / '));
   await click(element, 'stop');
   await until(element, () => audio.paused && audio.currentTime === 0);
+});
+
+/** Playback goes through the mixer's Sound Recorder column, under the master, like every player here. */
+it('plays back through its column in the mixer', async () => {
+  const mixer = new Mixer();
+  const { element } = await recorder({ mixer });
+  await take(element);
+  const audio = element.shadowRoot!.querySelector('audio')!;
+  mixer.set('soundrecorder', { volume: 0.5 });
+  mixer.set('master', { volume: 0.5 });
+  await until(element, () => audio.volume === 0.25);
+  mixer.set('soundrecorder', { muted: true });
+  await until(element, () => audio.muted);
 });

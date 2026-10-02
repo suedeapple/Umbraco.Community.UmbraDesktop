@@ -3,6 +3,7 @@ import { manifests } from './bundle.manifests.js';
 import { PLAYER_CONTENT_SIZE, PLAYER_MIN_CONTENT_SIZE } from './media-player/constants.js';
 import { VIEWER_CONTENT_SIZE, VIEWER_MIN_CONTENT_SIZE } from './picture-viewer/constants.js';
 import { RECORDER_CONTENT_SIZE, RECORDER_MIN_CONTENT_SIZE } from './sound-recorder/constants.js';
+import { VOLUME_CONTENT_SIZE, VOLUME_MIN_CONTENT_SIZE } from './volume-control/constants.js';
 import en from './localization/en.js';
 
 /**
@@ -32,6 +33,7 @@ const EXPECTED = [
   ['MediaPlayer', PLAYER_CONTENT_SIZE, PLAYER_MIN_CONTENT_SIZE],
   ['PictureViewer', VIEWER_CONTENT_SIZE, VIEWER_MIN_CONTENT_SIZE],
   ['SoundRecorder', RECORDER_CONTENT_SIZE, RECORDER_MIN_CONTENT_SIZE],
+  ['VolumeControl', VOLUME_CONTENT_SIZE, VOLUME_MIN_CONTENT_SIZE],
 ] as const;
 
 it('registers every app, in launcher order', () => {

@@ -1,7 +1,7 @@
 ---
 id: multimedia
 title: Multimedia
-description: Install the Multimedia add-on and find Media Player, Picture Viewer and Sound Recorder in the launcher.
+description: Install the Multimedia add-on and find its programs in the launcher.
 sidebar_position: 1
 image: ../screenshots/multimedia-desktop.png
 ---
@@ -43,6 +43,7 @@ To open a program, open the launcher and select it in the **Multimedia** group.
 | [Media Player](media-player.md) | Plays sound and video from the media library |
 | [Picture Viewer](picture-viewer.md) | Shows the pictures in a media folder, one by one or as a slideshow |
 | [Sound Recorder](sound-recorder.md) | Records a clip with the microphone, to download or add to the media library |
+| [Volume Control](volume-control.md) | Turns all the desktop's sound down, or one program's |
 
 Each program shows only what you can see in the Media section yourself: the media picker it opens is
 Umbraco's own, with your start nodes and permissions.

@@ -5,9 +5,12 @@ import { kindOf } from '../shared/media-kinds.js';
 import type { MediaFile, MediaKind } from '../shared/media-kinds.js';
 import { createMediaPicker } from '../shared/media-library.js';
 import type { MediaPicker } from '../shared/media-library.js';
+import { mixer as sharedMixer } from '../shared/mixer.js';
+import type { ChannelLevel, Mixer } from '../shared/mixer.js';
 import { PLAYER_BAR_HEIGHT_PX, PLAYER_MIN_SCREEN_HEIGHT_PX, PLAYER_PADDING_PX, PLAYER_SKIP_SECONDS } from './constants.js';
 import { formatTime } from './time.js';
 import { css, customElement, html, nothing, property, state } from '@umbraco-cms/backoffice/external/lit';
+import type { PropertyValues } from '@umbraco-cms/backoffice/external/lit';
 import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
 
 /**
@@ -25,6 +28,10 @@ import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
  * follows the media element's own events (`play`, `pause`, `timeupdate`…) rather than its own idea
  * of what it asked for, so a play the browser refused, or a file that ended, is shown as it is.
  *
+ * **Its volume is its column in the mixer** (`shared/mixer.ts`): the slider and Mute here set the
+ * Media Player column Volume Control shows, and what plays is that column under the master. One
+ * volume, wherever it is changed from.
+ *
  * The file streams from its media URL: nothing is downloaded first (`shared/media-library.ts`).
  * There is nothing to save, so the window never reports unsaved work, and closing it stops the
  * sound, since a window that is gone must not go on playing.
@@ -34,6 +41,10 @@ export class MediaPlayerElement extends UmbLitElement {
   /** How a file is picked from the media library. Umbraco's media picker unless a test says otherwise. */
   @property({ attribute: false })
   pickMedia?: MediaPicker;
+
+  /** The mixer it plays through. The desktop's one mixer unless a test says otherwise. */
+  @property({ attribute: false })
+  mixer: Mixer = sharedMixer;
 
   /** The file that is open, and whether it is sound or video. */
   @state()
@@ -51,13 +62,16 @@ export class MediaPlayerElement extends UmbLitElement {
   @state()
   private _duration = Number.NaN;
 
-  /** The volume, from 0 to 1. */
+  /** This player's own column in the mixer, which the slider and Mute show and set. */
   @state()
-  private _volume = 1;
+  private _level: ChannelLevel = { volume: 1, muted: false };
 
-  /** Whether the sound is muted. Separate from the volume, so unmuting goes back to where it was. */
+  /** What it plays at: its column under the master. */
   @state()
-  private _muted = false;
+  private _effective: ChannelLevel = { volume: 1, muted: false };
+
+  /** Stops listening to the mixer. Set while connected. */
+  #unsubscribe?: () => void;
 
   /** Why an open, or the file itself, did not work. Empty when there is nothing to say. */
   @state()
@@ -82,6 +96,36 @@ export class MediaPlayerElement extends UmbLitElement {
     this.addEventListener('mousedown', keepFocusOnPress);
     if (!this.hasAttribute('tabindex')) this.tabIndex = 0;
     this.addEventListener('keydown', this.#onKeyDown);
+    this.#listen();
+  }
+
+  /**
+   * Listen to whichever mixer it was given, again if it is given another.
+   * @param changed What changed since the last update.
+   */
+  override willUpdate(changed: PropertyValues<this>): void {
+    if (changed.has('mixer') && this.isConnected) this.#listen();
+  }
+
+  /** Give the media element what the mixer says, after every update and every change in the mixer. */
+  override updated(): void {
+    const media = this.#media;
+    if (!media) return;
+    if (media.volume !== this._effective.volume) media.volume = this._effective.volume;
+    if (media.muted !== this._effective.muted) media.muted = this._effective.muted;
+  }
+
+  /** Start listening to the mixer, and read it now. */
+  #listen(): void {
+    this.#unsubscribe?.();
+    this.#unsubscribe = this.mixer.subscribe(() => this.#readMixer());
+    this.#readMixer();
+  }
+
+  /** Read this player's column and what it plays at. */
+  #readMixer(): void {
+    this._level = this.mixer.get('mediaplayer');
+    this._effective = this.mixer.effective('mediaplayer');
   }
 
   /**
@@ -91,6 +135,8 @@ export class MediaPlayerElement extends UmbLitElement {
    */
   override disconnectedCallback(): void {
     this.#media?.pause();
+    this.#unsubscribe?.();
+    this.#unsubscribe = undefined;
     this.removeEventListener('keydown', this.#onKeyDown);
     super.disconnectedCallback();
   }
@@ -182,10 +228,9 @@ export class MediaPlayerElement extends UmbLitElement {
     media.currentTime = Math.min(Math.max(media.currentTime + seconds, 0), this._duration);
   }
 
-  /** Mute, or unmute back to the volume it had. */
+  /** Mute this player's column, or unmute it back to the volume it had. */
   toggleMute(): void {
-    const media = this.#media;
-    if (media) media.muted = !media.muted;
+    this.mixer.set('mediaplayer', { muted: !this._level.muted });
   }
 
   /**
@@ -210,8 +255,6 @@ export class MediaPlayerElement extends UmbLitElement {
     this._playing = !media.paused && !media.ended;
     this._current = media.currentTime;
     this._duration = media.duration;
-    this._volume = media.volume;
-    this._muted = media.muted;
   }
 
   /** A file the browser cannot decode, such as a `.mov` in a codec it lacks. */
@@ -284,7 +327,6 @@ export class MediaPlayerElement extends UmbLitElement {
           @seeked=${this.#onMediaEvent}
           @durationchange=${this.#onMediaEvent}
           @loadedmetadata=${this.#onMediaEvent}
-          @volumechange=${this.#onMediaEvent}
           @error=${this.#onMediaError}
         ></video>
         ${file
@@ -315,8 +357,8 @@ export class MediaPlayerElement extends UmbLitElement {
         ${this.#button('play', this._playing ? 'icon-pause' : 'icon-play', playLabel, () => this.togglePlay(), { disabled: !ready })}
         ${this.#button('stop', 'icon-stop', this.#term('playerStop', 'Stop'), () => this.stop(), { disabled: !ready })}
         <span class="title muted">${file?.kind === 'video' ? file.name : nothing}</span>
-        ${this.#button('mute', this._muted ? 'icon-sound-off' : 'icon-sound', muteLabel, () => this.toggleMute(), {
-          pressed: this._muted,
+        ${this.#button('mute', this._effective.muted ? 'icon-sound-off' : 'icon-sound', muteLabel, () => this.toggleMute(), {
+          pressed: this._level.muted,
         })}
         <input
           type="range"
@@ -325,13 +367,12 @@ export class MediaPlayerElement extends UmbLitElement {
           min="0"
           max="1"
           step="0.05"
-          .value=${String(this._volume)}
+          .value=${String(this._level.volume)}
           aria-label=${this.#term('playerVolume', 'Volume')}
           @input=${(event: Event) => {
-            const media = this.#media;
-            if (!media) return;
-            media.volume = Number((event.target as HTMLInputElement).value);
-            if (media.volume > 0) media.muted = false;
+            const volume = Number((event.target as HTMLInputElement).value);
+            // Turning the volume up is turning the sound back on, as on any mixer.
+            this.mixer.set('mediaplayer', volume > 0 ? { volume, muted: false } : { volume });
           }}
         />
         ${this.#button('fullscreen', 'icon-fullscreen', this.#term('playerFullScreen', 'Full screen'), () => this.fullScreen(), {

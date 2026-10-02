@@ -22,7 +22,9 @@ While a file is open:
 - To pause, select **Pause**, or press Space. To go back to the start, select **Stop**.
 - To jump to a point, drag the seek bar. To skip five seconds back or forward, press the Left or
   Right arrow.
-- To turn the sound down, drag **Volume**. To mute it, select **Mute**, or press M.
+- To turn the sound down, drag **Volume**. To mute it, select **Mute**, or press M. These are Media
+  Player's column in [Volume Control](volume-control.md), which can also turn all the desktop's sound
+  down at once.
 - To watch a video full screen, select **Full screen**, double-click the picture, or press F. Press
   Esc to come back.
 

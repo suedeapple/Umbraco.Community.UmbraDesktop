@@ -3,6 +3,7 @@ import { manifests } from './bundle.manifests.js';
 import './media-player/media-player.element.js';
 import './picture-viewer/picture-viewer.element.js';
 import './sound-recorder/sound-recorder.element.js';
+import './volume-control/volume-control.element.js';
 
 /**
  * Every app, measured in a real browser at both sizes its manifest declares, under every theme id
@@ -26,6 +27,7 @@ const TAGS: Record<string, string> = {
   MediaPlayer: 'umbradesktop-media-player',
   PictureViewer: 'umbradesktop-picture-viewer',
   SoundRecorder: 'umbradesktop-sound-recorder',
+  VolumeControl: 'umbradesktop-volume-control',
 };
 
 /** The published theme ids (`docs/developer/desktop-apps.md` §5), plus no theme at all. */

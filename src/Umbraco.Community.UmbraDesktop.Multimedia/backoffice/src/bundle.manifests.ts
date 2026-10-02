@@ -1,6 +1,7 @@
 import { PLAYER_CONTENT_SIZE, PLAYER_MIN_CONTENT_SIZE } from './media-player/constants.js';
 import { VIEWER_CONTENT_SIZE, VIEWER_MIN_CONTENT_SIZE } from './picture-viewer/constants.js';
 import { RECORDER_CONTENT_SIZE, RECORDER_MIN_CONTENT_SIZE } from './sound-recorder/constants.js';
+import { VOLUME_CONTENT_SIZE, VOLUME_MIN_CONTENT_SIZE } from './volume-control/constants.js';
 import { AREA } from './shared/area.js';
 import { manifests as localizationManifests } from './localization/manifest.js';
 
@@ -81,9 +82,10 @@ function app(
 }
 
 /**
- * The apps: the two that open what is already in the media library first, then the one that makes
- * something new for it. Spaced apart, as Minesweeper leaves room for Solitaire, so a new app lands
- * between two of these without renumbering.
+ * The apps: the ones that play and show what is already in the media library first, then the ones
+ * that make something new for it, then the two that look after the rest: Media Info, and Volume
+ * Control last, as Windows kept it apart from the programs. Spaced apart, as Minesweeper leaves room
+ * for Solitaire, so a new app lands between two of these without renumbering.
  */
 const apps: Array<UmbExtensionManifest> = [
   app(
@@ -109,6 +111,15 @@ const apps: Array<UmbExtensionManifest> = [
     () => import('./sound-recorder/sound-recorder.element.js'),
     RECORDER_CONTENT_SIZE,
     RECORDER_MIN_CONTENT_SIZE,
+  ),
+  // The desktop's mixer: a column for the master and one for each app above that makes sound.
+  app(
+    'VolumeControl',
+    500,
+    'icon-sound-medium',
+    () => import('./volume-control/volume-control.element.js'),
+    VOLUME_CONTENT_SIZE,
+    VOLUME_MIN_CONTENT_SIZE,
   ),
 ];
 
