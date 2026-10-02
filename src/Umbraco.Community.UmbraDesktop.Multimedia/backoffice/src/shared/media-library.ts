@@ -29,6 +29,17 @@ export type MediaPickResult =
       /** The folder the file is in, for Picture Viewer's Previous and Next: null for the root. */
       folder: string | null;
     } & MediaFile)
+  | {
+      /**
+       * A folder: the media picker lets one be chosen, and Picture Viewer opens it as the set of
+       * pictures in it.
+       */
+      status: 'folder';
+      /** The folder's key. */
+      unique: string;
+      /** The folder's name, for saying what was in it. */
+      name: string;
+    }
   | { status: 'cancelled' }
   | {
       status: 'failed';
@@ -46,10 +57,15 @@ export type MediaPicker = () => Promise<MediaPickResult>;
 
 /**
  * The real picker: `UMB_MEDIA_PICKER_MODAL`, the one a media picker property opens, so it browses
- * folders, searches and uploads exactly as the rest of the backoffice does. Folders are not
- * pickable. Whether the file suits the app that asked is the app's to decide once it has the
- * extension, so each can say so in its own words: the picker cannot filter by it, because what it
- * lists are media items, not files.
+ * folders, searches and uploads exactly as the rest of the backoffice does. Whether the file suits
+ * the app that asked is the app's to decide once it has the extension, so each can say so in its own
+ * words: the picker cannot filter by it, because what it lists are media items, not files.
+ *
+ * **A folder can be chosen too**, whatever `pickableFilter` says: Umbraco sets `isFolder` on no media
+ * item, the built-in Folder included (found while building Save As, `save-location.ts`). So a pick
+ * with no file behind it is told apart here, the same way Save As tells a folder: a media type with a
+ * collection, or children already under it. Picture Viewer opens one as its pictures; Media Player
+ * refuses it.
  * @param host The element opening, whose contexts the backoffice classes consume.
  * @returns A {@link MediaPicker}.
  */
@@ -67,6 +83,7 @@ export function createMediaPicker(host: UmbControllerHost): MediaPicker {
     ]);
     const item = items?.[0];
     const url = urls?.[0]?.url;
+    if (item && !url && (item.hasChildren || item.mediaType.collection)) return { status: 'folder', unique, name: item.name };
     if (!item || !url) return { status: 'failed', name: item?.name };
     return {
       status: 'picked',

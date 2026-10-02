@@ -168,6 +168,30 @@ it('says which file could not be opened', async () => {
   expect(text(element, '.notice')).to.equal('Lost could not be opened.');
 });
 
+/**
+ * A folder chosen in the picker opens as a slideshow-ready set of its pictures, from the first. The
+ * folder listing has already left out anything that is not a picture (`picturesIn`), so a folder
+ * of photos and PDFs shows the photos and skips the rest.
+ */
+it('opens a folder chosen in the picker at its first picture', async () => {
+  const { element, recorded } = await viewer([{ status: 'folder', unique: 'holidays', name: 'Holidays' }]);
+  await open(element);
+  expect(recorded.folders).to.deep.equal(['holidays']);
+  expect(picture(element).src).to.equal(FOLDER[0].url);
+  expect(text(element, '.name')).to.equal('Beach');
+  expect(text(element, '.position')).to.equal('1 of 3');
+  expect(control(element, 'slideshow').disabled).to.equal(false);
+});
+
+it('says so when a folder chosen has no pictures in it, and keeps what was open', async () => {
+  const { element } = await viewer([picked(FOLDER[0]), { status: 'folder', unique: 'documents', name: 'Documents' }]);
+  await open(element);
+  (element as unknown as { listPictures: () => Promise<MediaFile[]> }).listPictures = async () => [];
+  await open(element);
+  expect(text(element, '.notice')).to.equal('Documents has no pictures in it.');
+  expect(text(element, '.name')).to.equal('Beach');
+});
+
 /** A picture is fitted into the window at first, and a small one is shown at its own size, not blown up. */
 it('fits a large picture into the window, and shows a small one at its own size', async () => {
   const { element } = await viewer([picked(FOLDER[1])]);

@@ -153,6 +153,13 @@ it('says which file could not be opened', async () => {
   expect(text(element, '.notice')).to.equal('Lost could not be opened.');
 });
 
+/** A folder is neither sound nor video, and is said to be, rather than "could not be opened". */
+it('refuses a folder chosen in the picker', async () => {
+  const element = await player({ status: 'folder', unique: 'f', name: 'Holidays' });
+  await open(element);
+  expect(text(element, '.notice')).to.equal('Media Player plays sound and video, and Holidays is neither.');
+});
+
 it('plays and pauses from one button, which says what it will do', async () => {
   const element = await player(picked('Jingle', 'wav'));
   await open(element);

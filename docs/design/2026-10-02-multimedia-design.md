@@ -60,8 +60,13 @@ asked for, so a refused play or a finished file shows as it is.
 
 ## 6. Picture Viewer
 
-**Open a picture, and its folder comes with it.** The media picker cannot pick a folder, and opening
-the picture you meant first is how every desktop viewer works. The folder's other pictures come from
+**Open a picture, and its folder comes with it; or open the folder.** Opening the picture you meant
+is how every desktop viewer works, and choosing a folder starts at its first picture. The media
+picker lets a folder be chosen whatever its `pickableFilter` says, because Umbraco sets `isFolder` on
+no media item, so a pick with no file behind it is recognised as a folder the way Save As recognises
+one: a media type with a collection, or children already under it. Media Player refuses a folder.
+Either way only pictures are gone through: subfolders and every file that is not a picture are left
+out of the set, so a folder of photos and PDFs is a slideshow of the photos. The folder's pictures come from
 the media tree (`UmbMediaTreeRepository`) rather than the collection, because the tree is what start
 nodes are applied to and its order is the order the Media section shows. Up to 1,000 items are read.
 

@@ -143,8 +143,8 @@ export class MediaPlayerElement extends UmbLitElement {
       this._notice = this.#term('openFailed', `${result.name ?? ''} could not be opened.`, result.name ?? '');
       return;
     }
-    const kind = kindOf(result.extension);
-    if (kind !== 'audio' && kind !== 'video') {
+    const kind = result.status === 'folder' ? undefined : kindOf(result.extension);
+    if (result.status === 'folder' || (kind !== 'audio' && kind !== 'video')) {
       this._notice = this.#term('playerNotMedia', `Media Player plays sound and video, and ${result.name} is neither.`, result.name);
       return;
     }

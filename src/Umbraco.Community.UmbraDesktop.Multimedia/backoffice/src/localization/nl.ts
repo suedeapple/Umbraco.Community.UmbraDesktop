@@ -35,6 +35,7 @@ export default {
     viewerEmpty: 'Kies Openen… om de afbeeldingen in een mediamap te bekijken.',
     viewerNotPicture: 'Fotoviewer toont afbeeldingen, en %0% is er geen.',
     viewerCannotShow: '%0% kon niet worden weergegeven.',
+    viewerNoPictures: 'In %0% staan geen afbeeldingen.',
     recorderRecord: 'Opnemen',
     recorderLive: 'Opname',
     recorderRecording: 'Opname',

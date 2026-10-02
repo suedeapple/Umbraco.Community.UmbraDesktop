@@ -8,11 +8,17 @@ sidebar_position: 3
 # Picture Viewer
 
 Picture Viewer shows the pictures in the media library: JPEG, PNG, GIF, WebP, AVIF, SVG, BMP and ICO.
-Open one picture, and the rest of its folder comes with it, in the order the Media section lists
-them.
+It works through a folder at a time, in the order the Media section lists it, and skips everything in
+the folder that is not a picture, such as documents, videos and subfolders.
 
-To look at a picture, select **Open…** and choose it in Umbraco's media picker. The status bar shows
-its name, where it is in its folder, and how far it is zoomed.
+To open pictures, select **Open…** and, in Umbraco's media picker, choose either:
+
+- a picture, to start at that picture, with the rest of its folder to move through
+- a folder, to start at the first picture in it. Select the tick in the folder's corner, since
+  selecting the folder itself opens it in the picker
+
+The status bar shows the picture's name, where it is among the folder's pictures, and how far it is
+zoomed. A folder with no pictures in it says so.
 
 - To move through the folder, select **Previous picture** or **Next picture**, or press the Left or
   Right arrow. After the last picture comes the first again.

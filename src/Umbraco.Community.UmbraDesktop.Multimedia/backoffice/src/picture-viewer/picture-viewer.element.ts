@@ -163,7 +163,12 @@ export class PictureViewerElement extends UmbLitElement {
   }
 
   /**
-   * Pick a picture from the media library and show it, with the rest of its folder to go through.
+   * Pick a picture from the media library and show it, with the rest of its folder to go through;
+   * or pick a folder, and show its pictures from the first.
+   *
+   * Either way only the pictures are gone through: the folder listing leaves out subfolders and
+   * every file that is not a picture (`picturesIn`), so a folder of photos and PDFs is a slideshow of
+   * the photos. A folder with no pictures says so, and whatever was open stays open.
    *
    * The media picker offers every file; anything that is not a picture is refused here, by name, and
    * whatever was open stays open. A folder listing that does not include the picked picture (one
@@ -174,6 +179,17 @@ export class PictureViewerElement extends UmbLitElement {
     if (result.status === 'cancelled') return;
     if (result.status === 'failed') {
       this._notice = this.#term('openFailed', `${result.name ?? ''} could not be opened.`, result.name ?? '');
+      return;
+    }
+    if (result.status === 'folder') {
+      const pictures = await (this.listPictures ?? createFolderPictures(this))(result.unique).catch(() => []);
+      if (!pictures.length) {
+        this._notice = this.#term('viewerNoPictures', `${result.name} has no pictures in it.`, result.name);
+        return;
+      }
+      this.#setSlideshow(false);
+      this._pictures = pictures;
+      this.#show(0);
       return;
     }
     if (kindOf(result.extension) !== 'image') {

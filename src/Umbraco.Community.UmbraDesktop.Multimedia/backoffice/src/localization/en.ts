@@ -45,6 +45,7 @@ export default {
     viewerEmpty: 'Select Open… to look at the pictures in a media folder.',
     viewerNotPicture: 'Picture Viewer shows pictures, and %0% is not one.',
     viewerCannotShow: '%0% could not be shown.',
+    viewerNoPictures: '%0% has no pictures in it.',
     // Sound Recorder.
     recorderRecord: 'Record',
     recorderLive: 'Recording',
