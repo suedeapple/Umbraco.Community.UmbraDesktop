@@ -1,3 +1,4 @@
+import { CAMERA_CONTENT_SIZE, CAPTURE_MIN_CONTENT_SIZE, SNIPPING_CONTENT_SIZE } from './capture/constants.js';
 import { CD_CONTENT_SIZE, CD_MIN_CONTENT_SIZE } from './cd-player/constants.js';
 import { INFO_CONTENT_SIZE, INFO_MIN_CONTENT_SIZE } from './media-info/constants.js';
 import { EDITOR_CONTENT_SIZE, EDITOR_MIN_CONTENT_SIZE } from './photo-editor/constants.js';
@@ -125,6 +126,16 @@ const apps: Array<UmbExtensionManifest> = [
     () => import('./sound-recorder/sound-recorder.element.js'),
     RECORDER_CONTENT_SIZE,
     RECORDER_MIN_CONTENT_SIZE,
+  ),
+  // The webcam and the screen: a photo or a video of either, to download or add to the media library.
+  app('Camera', 750, 'icon-security-camera', () => import('./capture/camera.element.js'), CAMERA_CONTENT_SIZE, CAPTURE_MIN_CONTENT_SIZE),
+  app(
+    'SnippingTool',
+    700,
+    'icon-cut',
+    () => import('./capture/snipping-tool.element.js'),
+    SNIPPING_CONTENT_SIZE,
+    CAPTURE_MIN_CONTENT_SIZE,
   ),
   // Everything about one media file, as Windows' Properties told you about a file.
   app('MediaInfo', 600, 'icon-info', () => import('./media-info/media-info.element.js'), INFO_CONTENT_SIZE, INFO_MIN_CONTENT_SIZE),

@@ -45,6 +45,8 @@ To open a program, open the launcher and select it in the **Multimedia** group.
 | [Picture Viewer](picture-viewer.md) | Shows the pictures in a media folder, one by one or as a slideshow |
 | [Photo Editor](photo-editor.md) | Crops, rotates, flips and resizes a picture, then saves it back or as a copy |
 | [Sound Recorder](sound-recorder.md) | Records a clip with the microphone, to download or add to the media library |
+| [Camera](camera.md) | Takes a photo or records a video with the webcam |
+| [Snipping Tool](snipping-tool.md) | Takes a screenshot, or records a screen, window or tab |
 | [Media Info](media-info.md) | Shows everything about a file, including what the camera wrote into a photo |
 | [Volume Control](volume-control.md) | Turns all the desktop's sound down, or one program's |
 

@@ -1,5 +1,7 @@
 import { expect, fixture, html } from '@open-wc/testing';
 import { manifests } from './bundle.manifests.js';
+import './capture/camera.element.js';
+import './capture/snipping-tool.element.js';
 import './cd-player/cd-player.element.js';
 import './media-info/media-info.element.js';
 import './media-player/media-player.element.js';
@@ -32,6 +34,8 @@ const TAGS: Record<string, string> = {
   PictureViewer: 'umbradesktop-picture-viewer',
   PhotoEditor: 'umbradesktop-photo-editor',
   SoundRecorder: 'umbradesktop-sound-recorder',
+  Camera: 'umbradesktop-camera',
+  SnippingTool: 'umbradesktop-snipping-tool',
   MediaInfo: 'umbradesktop-media-info',
   VolumeControl: 'umbradesktop-volume-control',
 };

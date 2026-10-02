@@ -1,5 +1,6 @@
 import { expect } from '@open-wc/testing';
 import { manifests } from './bundle.manifests.js';
+import { CAMERA_CONTENT_SIZE, CAPTURE_MIN_CONTENT_SIZE, SNIPPING_CONTENT_SIZE } from './capture/constants.js';
 import { CD_CONTENT_SIZE, CD_MIN_CONTENT_SIZE } from './cd-player/constants.js';
 import { INFO_CONTENT_SIZE, INFO_MIN_CONTENT_SIZE } from './media-info/constants.js';
 import { EDITOR_CONTENT_SIZE, EDITOR_MIN_CONTENT_SIZE } from './photo-editor/constants.js';
@@ -38,6 +39,8 @@ const EXPECTED = [
   ['PictureViewer', VIEWER_CONTENT_SIZE, VIEWER_MIN_CONTENT_SIZE],
   ['PhotoEditor', EDITOR_CONTENT_SIZE, EDITOR_MIN_CONTENT_SIZE],
   ['SoundRecorder', RECORDER_CONTENT_SIZE, RECORDER_MIN_CONTENT_SIZE],
+  ['Camera', CAMERA_CONTENT_SIZE, CAPTURE_MIN_CONTENT_SIZE],
+  ['SnippingTool', SNIPPING_CONTENT_SIZE, CAPTURE_MIN_CONTENT_SIZE],
   ['MediaInfo', INFO_CONTENT_SIZE, INFO_MIN_CONTENT_SIZE],
   ['VolumeControl', VOLUME_CONTENT_SIZE, VOLUME_MIN_CONTENT_SIZE],
 ] as const;
