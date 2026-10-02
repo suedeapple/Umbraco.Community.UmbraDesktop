@@ -103,6 +103,10 @@
     "media player",
     "picture viewer",
     "sound recorder",
+    "cd player",
+    "photo editor",
+    "webcam",
+    "screenshot",
     "minesweeper",
     "snake",
     "language",
@@ -199,7 +203,7 @@
     {
       "PackageId": "Umbraco.Community.UmbraDesktop.Multimedia",
       "GroupTitle": "Optional add-ons",
-      "Description": "Media Player, Picture Viewer and Sound Recorder for the desktop, working with the files in your media library. Released from the same tag and always the same version. Entirely optional: the desktop is unchanged without it."
+      "Description": "Media Player, CD Player, Picture Viewer, Photo Editor, Sound Recorder, Camera, Snipping Tool and more for the desktop, working with the files in your media library. Released from the same tag and always the same version. Entirely optional: the desktop is unchanged without it."
     },
     {
       "PackageId": "Umbraco.Community.UmbraDesktop.Entertainment",

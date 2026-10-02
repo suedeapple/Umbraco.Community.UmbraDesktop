@@ -12,7 +12,7 @@ Four packages, from **one tag**, always at the **same version**:
 | `Umbraco.Community.UmbraDesktop` | The desktop. The product. |
 | `Umbraco.Community.UmbraDesktop.Entertainment` | Optional games add-on. |
 | `Umbraco.Community.UmbraDesktop.Accessories` | Optional tools add-on. Notepad, Paint, Sticky Notes, Calculator, Character Map, Clock, Screen Saver, Disk Cleanup and System Information. It has server-side code of its own (the Sticky Notes API) and a C# test project beside it. |
-| `Umbraco.Community.UmbraDesktop.Multimedia` | Optional media add-on. Media Player, Picture Viewer and Sound Recorder. Its one piece of server code teaches the site to serve the sound formats Umbraco accepts and ASP.NET Core does not (`.weba`, `.opus`, `.flac`), with a C# test project beside it. |
+| `Umbraco.Community.UmbraDesktop.Multimedia` | Optional media add-on. Media Player, CD Player, Picture Viewer, Photo Editor, Sound Recorder, Camera, Snipping Tool, Media Info and Volume Control. Its one piece of server code teaches the site to serve the sound formats Umbraco accepts and ASP.NET Core does not (`.weba`, `.opus`, `.flac`), with a C# test project beside it. |
 
 Lockstep is a decision, not an accident: design D13 in
 [`docs/design/2026-09-06-desktop-apps-design.md`](docs/design/2026-09-06-desktop-apps-design.md)

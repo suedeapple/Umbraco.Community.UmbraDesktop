@@ -1,4 +1,4 @@
-# Multimedia: Media Player, Picture Viewer and Sound Recorder
+# Multimedia: Media Player, CD Player, Picture Viewer, Photo Editor, Sound Recorder, Camera, Snipping Tool, Media Info and Volume Control
 
 The third optional add-on, `Umbraco.Community.UmbraDesktop.Multimedia`: the programs Windows kept
 for sound and pictures, as desktop apps over the media library. It follows the Accessories add-on
@@ -30,6 +30,17 @@ Recorder beside the tools under Accessories > Entertainment, and both before the
 | Media Player | 520 × 400, min 360 × 216 | Plays sound and video from the media library |
 | Picture Viewer | 560 × 480, min 360 × 178 | Shows a picture and the rest of its folder, with zoom and a slideshow |
 | Sound Recorder | 440 × 260, min 340 × 186 | Records from the microphone, to download or add to the media library |
+| Volume Control | 492 × 280, min 492 × 186 | The desktop's mixer: the master and one column per app that makes sound |
+| CD Player | 380 × 400, min 320 × 214 | Plays a media folder of sound files as a disc, with shuffle and repeat |
+| Media Info | 420 × 480, min 300 × 190 | Everything about one media file, EXIF included |
+| Photo Editor | 640 × 520, min 500 × 226 | Crops, rotates, flips and resizes a picture, then saves it back or as a copy |
+| Camera | 560 × 438, min 420 × 208 | Takes a photo or records a video with the webcam |
+| Snipping Tool | 520 × 398, min 420 × 208 | Takes a screenshot, or records a screen, window or tab |
+
+The first three shipped first; the other six were added on the same branch, ranked from a longer
+list of candidates by how well each fits the add-on (a Windows multimedia program, useful to an
+editor, and working with the media library). In the launcher the players and viewers come first,
+then the apps that make something, then Media Info, and Volume Control last, as Windows kept it apart.
 
 Every number is derived in the app's `constants.ts` and measured by `fits.test.ts` under every theme
 id, as in Accessories.
@@ -118,7 +129,55 @@ in the CI's list of them.
 The alternatives were worse. Saving as `.webm` would file a recording under Video. Encoding WAV
 ourselves would make a ten-minute recording 20MB and land it as a File item rather than Audio.
 
-## 9. What the build taught
+## 9. Volume Control: one mixer for the desktop
+
+`shared/mixer.ts` is one module instance that every app imports: a master and a column per app that
+makes sound. An app plays at its column times the master, muted if either is, and listens for
+changes, so a fader moved in Volume Control is heard at once in every open window. Media Player's own
+slider and Mute *are* its column, rather than a second volume that could disagree with it. A module
+instance rather than a context, because everything that reads it is in this bundle, which loads once.
+
+The settings are remembered in `localStorage`, as a computer keeps its volume: a per-person, per-
+machine convenience, read and written inside try/catch so a private window still has a mixer for the
+session, and shared across tabs through the `storage` event. The faders are range inputs stood
+upright with `writing-mode`, so they keep the keyboard and the screen reader.
+
+## 10. CD Player
+
+A folder is the disc, listed by the same `filesIn` that lists Picture Viewer's pictures, so a folder of
+sound and liner notes plays the sound. The rules (next after the end of a track, stop after the last
+back at track 1, shuffle from the track playing, repeat all and one, Previous a few seconds in
+restarts) are pure functions over an immutable playlist (`playlist.ts`), and the element swaps one
+playlist for the next. The display is green on black under every theme, as the trace is.
+
+## 11. Media Info
+
+Nothing is downloaded whole: size and type from a `HEAD` (or a one-byte range, whose
+`Content-Range` gives the size), dimensions and length from the browser decoding a picture or a
+media file's metadata, and EXIF from the first 128 KB of a JPEG. The EXIF reader (`exif.ts`) reads
+only the tags shown, bounds-checks everything, and is tested on JPEGs built byte by byte in both byte
+orders; a damaged or cut-short file gives what could be read. The place links to OpenStreetMap,
+which needs no key, in a new tab, with `data-router-slot="disabled"`.
+
+## 12. Photo Editor
+
+Open and Save are the Accessories package's opener and saver, copied (§1): Save writes back over the
+item with the overwrite check, Save As asks for a folder and saves a copy. Sound Recorder's adder is
+now the create-only case of the same saver. Every edit returns a new canvas, so undo is the previous
+canvas, bounded at 20 steps because a photograph's canvas is megabytes. The picture keeps its own
+format where a canvas can write it, and an SVG is refused.
+
+## 13. Camera and Snipping Tool
+
+One element in two configurations (`capture.element.ts`), over a core (`capture/media.ts`) that gets
+the stream, grabs a frame, records, and always lets go of the stream. The camera stays off until
+Start camera and goes off for every review, so its light is on only while capturing; a screenshot
+stops sharing as soon as its frame is taken; and Stop sharing in the browser's own bar ends a screen
+recording as Stop does. The camera's preview is mirrored, as every camera app shows a selfie; the
+photo is not. A capture is kept exactly as a recording is: Download, or Add to Media through Save As,
+unsaved until then. Closing the browser's screen picker is changing one's mind and says nothing.
+
+## 14. What the build taught
 
 - **Chrome refuses `play()` from a scripted click.** `element.click()` carries no user activation, so
   in a test the media element stays paused and the button never says Pause. The playback tests press
@@ -143,3 +202,27 @@ ourselves would make a ten-minute recording 20MB and land it as a File item rath
   spinner) points nowhere near the cause.
 - **Check the served file, not just the created item.** The `.weba` gap passed every test and every
   look at the Media section; only fetching the item's URL showed the 404.
+
+Added with the second six:
+
+- **A canvas is a webcam in a test.** `canvas.captureStream()` gives a live video track Chrome treats
+  as it treats a camera or a shared screen, so the capture tests run the real `MediaRecorder` and
+  frame grab. Calling `track.stop()` does not fire the track's `ended` event (only the browser ending
+  it does), so the test of Stop sharing dispatches it.
+- **Chrome's fakes go further than expected.** With `--use-fake-device-for-media-stream
+  --use-fake-ui-for-media-stream`, the webcam is a 1280 × 720 test pattern and `getDisplayMedia`
+  hands over an 800 × 450 screen with no picker, so Camera and Snipping Tool were both driven in a
+  running backoffice.
+- **Check icons by looking at them.** `icon-pictures` draws a camera, not pictures, and there is no
+  `icon-camera`; the first launcher had Picture Viewer with a camera and Camera with a CCTV camera.
+  Camera now has `icon-pictures` and Picture Viewer `icon-photo-album`. `icon-undo` was both Undo and
+  Rotate left until Undo took `icon-history`.
+- **A scripted drag that lands on the wrong window selects text.** Placing windows for a screenshot,
+  the first one dragged to the front covered the others' titlebars, and the next drags selected the
+  words in its toolbar. Place the top-most window first. The crop area now also refuses to start a
+  text selection, which a real drag past the picture's edge would have done too.
+- **The harness hangs its database after a script dies mid-request,** not only after a clean close,
+  and every later login then shows "Your session has timed out". Leave the page in a `catch` as well
+  as at the end, and restart the site when the login page appears.
+- **Under the Windows 98 theme the Start menu is a cascade**, and an app low in it can be off-screen
+  for a script; open the windows under the Umbraco theme's launcher, then switch theme for the shot.

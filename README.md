@@ -52,7 +52,7 @@ UmbraDesktop grants no access of its own. A user only sees apps for the sections
 
 ## Sound and pictures, if you want them
 
-[`Umbraco.Community.UmbraDesktop.Multimedia`](https://www.nuget.org/packages/Umbraco.Community.UmbraDesktop.Multimedia) is an optional add-on with Media Player, Picture Viewer and Sound Recorder, which play, show and record the files in your media library. The desktop is unchanged without it.
+[`Umbraco.Community.UmbraDesktop.Multimedia`](https://www.nuget.org/packages/Umbraco.Community.UmbraDesktop.Multimedia) is an optional add-on with Media Player, CD Player, Picture Viewer, Photo Editor, Sound Recorder, Camera, Snipping Tool and more, which play, show, edit and record the files in your media library. The desktop is unchanged without it.
 
 ## Games, if you want them
 

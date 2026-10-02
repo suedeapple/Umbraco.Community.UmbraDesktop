@@ -1,16 +1,16 @@
 ---
 id: multimedia
 title: Multimedia
-description: Install the Multimedia add-on and find its programs in the launcher.
+description: Install the Multimedia add-on and find its nine programs in the launcher.
 sidebar_position: 1
 image: ../screenshots/multimedia-desktop.png
 ---
 
 # Multimedia
 
-UmbraDesktop Multimedia puts the programs Windows kept for sound and pictures on the desktop, each in a
-window of its own and themed along with the rest of it. All three work with the files in your media
-library.
+UmbraDesktop Multimedia puts the programs Windows kept for sound, pictures and video on the desktop,
+each in a window of its own and themed along with the rest of it. They play, show, edit and record
+the files in your media library.
 
 ## Install
 

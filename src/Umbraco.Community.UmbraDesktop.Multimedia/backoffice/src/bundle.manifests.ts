@@ -105,7 +105,7 @@ const apps: Array<UmbExtensionManifest> = [
   app(
     'PictureViewer',
     900,
-    'icon-pictures',
+    'icon-photo-album',
     () => import('./picture-viewer/picture-viewer.element.js'),
     VIEWER_CONTENT_SIZE,
     VIEWER_MIN_CONTENT_SIZE,
@@ -128,7 +128,7 @@ const apps: Array<UmbExtensionManifest> = [
     RECORDER_MIN_CONTENT_SIZE,
   ),
   // The webcam and the screen: a photo or a video of either, to download or add to the media library.
-  app('Camera', 750, 'icon-security-camera', () => import('./capture/camera.element.js'), CAMERA_CONTENT_SIZE, CAPTURE_MIN_CONTENT_SIZE),
+  app('Camera', 750, 'icon-pictures', () => import('./capture/camera.element.js'), CAMERA_CONTENT_SIZE, CAPTURE_MIN_CONTENT_SIZE),
   app(
     'SnippingTool',
     700,

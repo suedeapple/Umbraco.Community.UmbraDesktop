@@ -10,8 +10,8 @@
 	  <Product>Umbraco.Community.UmbraDesktop.Multimedia</Product>
 	  <PackageId>Umbraco.Community.UmbraDesktop.Multimedia</PackageId>
 	  <Title>UmbraDesktop Multimedia</Title>
-	  <Description>Sound and pictures for UmbraDesktop. An optional add-on that puts Media Player, Picture Viewer and Sound Recorder on the desktop, each in a window of its own, themed along with the rest of it and working with the files in your media library.</Description>
-	  <PackageTags>umbraco;backoffice;desktop;multimedia;media-player;audio;video;picture-viewer;slideshow;images;sound-recorder;microphone;umbradesktop;apps;umbraco-marketplace</PackageTags>
+	  <Description>Sound, pictures and video for UmbraDesktop. An optional add-on that puts Media Player, CD Player, Picture Viewer, Photo Editor, Sound Recorder, Camera, Snipping Tool, Media Info and Volume Control on the desktop, each in a window of its own, themed along with the rest of it and working with the files in your media library.</Description>
+	  <PackageTags>umbraco;backoffice;desktop;multimedia;media-player;cd-player;playlist;audio;video;picture-viewer;slideshow;photo-editor;crop;resize;images;sound-recorder;microphone;camera;webcam;snipping-tool;screenshot;screen-recorder;exif;volume;umbradesktop;apps;umbraco-marketplace</PackageTags>
 	  <RootNamespace>Umbraco.Community.UmbraDesktop.Multimedia</RootNamespace>
 	  <Authors>Luuk Peters</Authors>
 	  <Company>Luuk Peters</Company>

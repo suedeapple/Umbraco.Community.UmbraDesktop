@@ -654,11 +654,14 @@ export class PhotoEditorElement extends UmbLitElement {
         display: grid;
       }
 
+      /* No text selection from a drag that starts on the picture: a crop drawn past the picture's edge
+         would otherwise highlight the toolbar's words as it went. */
       .stage {
         position: relative;
         margin: auto;
         line-height: 0;
         touch-action: none;
+        user-select: none;
       }
 
       .stage.cropping {

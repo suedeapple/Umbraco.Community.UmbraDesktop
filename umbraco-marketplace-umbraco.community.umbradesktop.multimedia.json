@@ -3,7 +3,7 @@
   "Title": "UmbraDesktop Multimedia",
   "Category": "Editor Tools",
   "AlternateCategory": "Developer Tools",
-  "Description": "Sound and pictures for UmbraDesktop. An optional add-on that puts Media Player, Picture Viewer and Sound Recorder on the desktop, each in a window of its own and working with the files in your media library.",
+  "Description": "Sound, pictures and video for UmbraDesktop: play, view, edit and record the files in your media library, each program in a window of its own and themed along with the rest of the desktop.",
   "PackageType": "Package",
   "LicenseTypes": [
     "Free"
@@ -30,6 +30,21 @@
     "sound recorder",
     "voice recorder",
     "microphone",
+    "cd player",
+    "playlist",
+    "photo editor",
+    "crop",
+    "resize",
+    "rotate",
+    "camera",
+    "webcam",
+    "snipping tool",
+    "screenshot",
+    "screen recorder",
+    "media info",
+    "exif",
+    "volume control",
+    "mixer",
     "media library",
     "umbradesktop",
     "desktop",
@@ -60,7 +75,11 @@
   "Screenshots": [
     {
       "ImageUrl": "https://raw.githubusercontent.com/Luuk1983/Umbraco.Community.UmbraDesktop/main/src/Umbraco.Community.UmbraDesktop.Multimedia/docs/screenshots/multimedia-desktop.png",
-      "Caption": "Media Player, Picture Viewer and Sound Recorder on the desktop under the Windows 98 theme, each in a window of its own with its own taskbar button."
+      "Caption": "Media Player showing a video, Picture Viewer showing a photo from a media folder and Sound Recorder recording, under the Windows 98 theme."
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/Luuk1983/Umbraco.Community.UmbraDesktop/main/src/Umbraco.Community.UmbraDesktop.Multimedia/docs/screenshots/multimedia-tools.png",
+      "Caption": "Photo Editor cropping a photo, CD Player playing a media folder track by track, and Volume Control, the desktop's mixer."
     }
   ]
 }

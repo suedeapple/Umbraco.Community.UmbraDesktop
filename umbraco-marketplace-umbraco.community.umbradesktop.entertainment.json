@@ -48,7 +48,7 @@
     {
       "PackageId": "Umbraco.Community.UmbraDesktop.Multimedia",
       "GroupTitle": "Optional add-ons",
-      "Description": "Media Player, Picture Viewer and Sound Recorder for the desktop. Independent of this package: install either, both or neither."
+      "Description": "Media Player, CD Player, Picture Viewer, Photo Editor, Sound Recorder, Camera, Snipping Tool and more for the desktop. Independent of this package: install either, both or neither."
     }
   ],
   "Screenshots": [
