@@ -379,8 +379,7 @@ export class CdPlayerElement extends UmbLitElement {
           ?disabled=${!list}
           @click=${() => this.cycleRepeat()}
         >
-          <umb-icon name="icon-repeat"></umb-icon>
-          ${list?.repeat === 'one' ? html`<span class="one">1</span>` : nothing}
+          <umb-icon name=${list?.repeat === 'one' ? 'icon-repeat-one' : 'icon-repeat'}></umb-icon>
         </button>
       </div>
       <div class="tracks sunken" role="list" aria-label=${this.#term('cdTracks', 'Tracks')}>
@@ -445,19 +444,9 @@ export class CdPlayerElement extends UmbLitElement {
       }
 
       .control.icon {
-        position: relative;
         width: ${CD_BAR_HEIGHT_PX}px;
         padding: 0;
         font-size: 16px;
-      }
-
-      /* Repeat one: a small 1 on the repeat sign, as phones and CD players mark it. */
-      .one {
-        position: absolute;
-        right: 3px;
-        bottom: 1px;
-        font-size: 9px;
-        font-weight: bold;
       }
 
       .notice {

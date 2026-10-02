@@ -118,3 +118,35 @@ export function filesIn(items: FolderItem[], urls: ItemUrl[], kind: MediaKind): 
 export function picturesIn(items: FolderItem[], urls: ItemUrl[]): MediaFile[] {
   return filesIn(items, urls, 'image');
 }
+
+/** The image types a browser canvas can write, so Photo Editor can save a picture in its own format. */
+const WRITABLE_IMAGE_TYPES = new Set(['image/png', 'image/jpeg', 'image/webp']);
+
+/**
+ * The type Photo Editor saves a picture as, or undefined when it cannot edit it.
+ *
+ * The Accessories package's rule for Paint: a picture is saved in the format it arrived in wherever
+ * a canvas can write that format, so a photograph stays a JPEG and keeps its size. Other raster
+ * formats (GIF, BMP) are saved as PNG, which loses nothing. SVG is refused: it is a drawing in text,
+ * and saving pixels over it would destroy it.
+ * @param mimeType The picture's type.
+ * @returns The type to save as, or undefined.
+ */
+export function editableImageType(mimeType: string): string | undefined {
+  if (!mimeType.startsWith('image/') || mimeType === 'image/svg+xml') return undefined;
+  return WRITABLE_IMAGE_TYPES.has(mimeType) ? mimeType : 'image/png';
+}
+
+/**
+ * The name of the file behind a media item: what the person called it, with an extension added when
+ * the name has none, since the media library chooses a media type by extension. A name that has one
+ * keeps it, so `logo.png` is not saved as `logo.png.png`.
+ * @param name What the person called it. Empty means untitled.
+ * @param untitled The localised word for something with no name.
+ * @param extension The extension to add when the name has none, without the dot.
+ * @returns The file name.
+ */
+export function fileNameFor(name: string, untitled: string, extension: string): string {
+  const base = name.trim() || untitled;
+  return extensionOf(base) ? base : `${base}.${extension}`;
+}

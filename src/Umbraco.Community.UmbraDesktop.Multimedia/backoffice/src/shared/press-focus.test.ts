@@ -3,6 +3,7 @@ import { sendMouse } from '@web/test-runner-commands';
 import '../cd-player/cd-player.element.js';
 import '../media-info/media-info.element.js';
 import '../media-player/media-player.element.js';
+import '../photo-editor/photo-editor.element.js';
 import '../picture-viewer/picture-viewer.element.js';
 import '../sound-recorder/sound-recorder.element.js';
 import { PRESSED_FOCUS, keepFocusOnPress } from './press-focus.js';
@@ -17,7 +18,7 @@ import { PRESSED_FOCUS, keepFocusOnPress } from './press-focus.js';
  */
 
 /** Every app element with buttons in it. Volume Control has none: its controls are sliders and boxes. */
-const TAGS = ['umbradesktop-cd-player', 'umbradesktop-media-info', 'umbradesktop-media-player', 'umbradesktop-picture-viewer', 'umbradesktop-sound-recorder'];
+const TAGS = ['umbradesktop-cd-player', 'umbradesktop-media-info', 'umbradesktop-media-player', 'umbradesktop-photo-editor', 'umbradesktop-picture-viewer', 'umbradesktop-sound-recorder'];
 
 /**
  * Press the mouse on `target` without the browser's own input. A dispatched event reaches a

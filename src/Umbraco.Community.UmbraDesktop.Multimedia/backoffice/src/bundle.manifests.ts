@@ -1,5 +1,6 @@
 import { CD_CONTENT_SIZE, CD_MIN_CONTENT_SIZE } from './cd-player/constants.js';
 import { INFO_CONTENT_SIZE, INFO_MIN_CONTENT_SIZE } from './media-info/constants.js';
+import { EDITOR_CONTENT_SIZE, EDITOR_MIN_CONTENT_SIZE } from './photo-editor/constants.js';
 import { PLAYER_CONTENT_SIZE, PLAYER_MIN_CONTENT_SIZE } from './media-player/constants.js';
 import { VIEWER_CONTENT_SIZE, VIEWER_MIN_CONTENT_SIZE } from './picture-viewer/constants.js';
 import { RECORDER_CONTENT_SIZE, RECORDER_MIN_CONTENT_SIZE } from './sound-recorder/constants.js';
@@ -107,6 +108,15 @@ const apps: Array<UmbExtensionManifest> = [
     () => import('./picture-viewer/picture-viewer.element.js'),
     VIEWER_CONTENT_SIZE,
     VIEWER_MIN_CONTENT_SIZE,
+  ),
+  // Crop, rotate, flip and resize a picture from the media library.
+  app(
+    'PhotoEditor',
+    850,
+    'icon-crop',
+    () => import('./photo-editor/photo-editor.element.js'),
+    EDITOR_CONTENT_SIZE,
+    EDITOR_MIN_CONTENT_SIZE,
   ),
   app(
     'SoundRecorder',

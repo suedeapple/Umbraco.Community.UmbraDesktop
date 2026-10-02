@@ -1,5 +1,5 @@
 import { expect } from '@open-wc/testing';
-import { extensionOf, filesIn, kindOf, picturesIn } from './media-kinds.js';
+import { editableImageType, extensionOf, fileNameFor, filesIn, kindOf, picturesIn } from './media-kinds.js';
 
 /**
  * Which media files each app opens, decided from the file alone, since the media picker cannot be
@@ -72,4 +72,31 @@ it('lists the sound files in a folder, in its order, and nothing else', () => {
     { unique: 'd', url: '/media/d/trailer.mp4' },
   ];
   expect(filesIn(items, urls, 'audio').map((file) => file.name)).to.deep.equal(['Intro', 'Outro']);
+});
+
+/**
+ * A media item's name is what the person typed; the file behind it needs an extension so the media
+ * library picks the right media type and a browser knows what it is. (The Accessories package's rule,
+ * which Photo Editor keeps.)
+ */
+it('names the file after the picture, keeping an extension the name already has', () => {
+  expect(fileNameFor('', 'Untitled', 'png')).to.equal('Untitled.png');
+  expect(fileNameFor('Beach', 'Untitled', 'jpg')).to.equal('Beach.jpg');
+  expect(fileNameFor('logo.png', 'Untitled', 'png')).to.equal('logo.png');
+  expect(fileNameFor('  Logo  ', 'Untitled', 'png')).to.equal('Logo.png');
+});
+
+/**
+ * Photo Editor saves in the format it was given where a canvas can write it, so a JPEG stays a JPEG
+ * and keeps its size; GIF and BMP become PNG, which loses nothing. An SVG is a drawing, not pixels,
+ * and is refused rather than flattened.
+ */
+it('saves a picture in its own format where it can, and refuses a drawing', () => {
+  expect(editableImageType('image/png')).to.equal('image/png');
+  expect(editableImageType('image/jpeg')).to.equal('image/jpeg');
+  expect(editableImageType('image/webp')).to.equal('image/webp');
+  expect(editableImageType('image/gif')).to.equal('image/png');
+  expect(editableImageType('image/bmp')).to.equal('image/png');
+  expect(editableImageType('image/svg+xml')).to.equal(undefined);
+  expect(editableImageType('application/pdf')).to.equal(undefined);
 });

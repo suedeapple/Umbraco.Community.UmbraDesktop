@@ -30,5 +30,4 @@ zoomed. A folder with no pictures in it says so.
   window again, select **Fit to window**, or press 0.
 
 Each picture opens fitted to the window, and a small one is shown at its own size rather than blown
-up. Picture Viewer only shows pictures. To change one, use Paint from the
-[Accessories](https://www.nuget.org/packages/Umbraco.Community.UmbraDesktop.Accessories) add-on.
+up. Picture Viewer only shows pictures. To crop, rotate or resize one, use [Photo Editor](photo-editor.md).

@@ -3,6 +3,7 @@ import { manifests } from './bundle.manifests.js';
 import './cd-player/cd-player.element.js';
 import './media-info/media-info.element.js';
 import './media-player/media-player.element.js';
+import './photo-editor/photo-editor.element.js';
 import './picture-viewer/picture-viewer.element.js';
 import './sound-recorder/sound-recorder.element.js';
 import './volume-control/volume-control.element.js';
@@ -29,6 +30,7 @@ const TAGS: Record<string, string> = {
   MediaPlayer: 'umbradesktop-media-player',
   CDPlayer: 'umbradesktop-cd-player',
   PictureViewer: 'umbradesktop-picture-viewer',
+  PhotoEditor: 'umbradesktop-photo-editor',
   SoundRecorder: 'umbradesktop-sound-recorder',
   MediaInfo: 'umbradesktop-media-info',
   VolumeControl: 'umbradesktop-volume-control',
