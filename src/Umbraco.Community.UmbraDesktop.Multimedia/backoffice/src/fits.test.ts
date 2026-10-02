@@ -1,6 +1,7 @@
 import { expect, fixture, html } from '@open-wc/testing';
 import { manifests } from './bundle.manifests.js';
 import './cd-player/cd-player.element.js';
+import './media-info/media-info.element.js';
 import './media-player/media-player.element.js';
 import './picture-viewer/picture-viewer.element.js';
 import './sound-recorder/sound-recorder.element.js';
@@ -29,6 +30,7 @@ const TAGS: Record<string, string> = {
   CDPlayer: 'umbradesktop-cd-player',
   PictureViewer: 'umbradesktop-picture-viewer',
   SoundRecorder: 'umbradesktop-sound-recorder',
+  MediaInfo: 'umbradesktop-media-info',
   VolumeControl: 'umbradesktop-volume-control',
 };
 

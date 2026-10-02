@@ -44,6 +44,7 @@ To open a program, open the launcher and select it in the **Multimedia** group.
 | [CD Player](cd-player.md) | Plays a media folder of sound files track by track, with shuffle and repeat |
 | [Picture Viewer](picture-viewer.md) | Shows the pictures in a media folder, one by one or as a slideshow |
 | [Sound Recorder](sound-recorder.md) | Records a clip with the microphone, to download or add to the media library |
+| [Media Info](media-info.md) | Shows everything about a file, including what the camera wrote into a photo |
 | [Volume Control](volume-control.md) | Turns all the desktop's sound down, or one program's |
 
 Each program shows only what you can see in the Media section yourself: the media picker it opens is

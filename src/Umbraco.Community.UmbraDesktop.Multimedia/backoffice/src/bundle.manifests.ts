@@ -1,4 +1,5 @@
 import { CD_CONTENT_SIZE, CD_MIN_CONTENT_SIZE } from './cd-player/constants.js';
+import { INFO_CONTENT_SIZE, INFO_MIN_CONTENT_SIZE } from './media-info/constants.js';
 import { PLAYER_CONTENT_SIZE, PLAYER_MIN_CONTENT_SIZE } from './media-player/constants.js';
 import { VIEWER_CONTENT_SIZE, VIEWER_MIN_CONTENT_SIZE } from './picture-viewer/constants.js';
 import { RECORDER_CONTENT_SIZE, RECORDER_MIN_CONTENT_SIZE } from './sound-recorder/constants.js';
@@ -115,6 +116,8 @@ const apps: Array<UmbExtensionManifest> = [
     RECORDER_CONTENT_SIZE,
     RECORDER_MIN_CONTENT_SIZE,
   ),
+  // Everything about one media file, as Windows' Properties told you about a file.
+  app('MediaInfo', 600, 'icon-info', () => import('./media-info/media-info.element.js'), INFO_CONTENT_SIZE, INFO_MIN_CONTENT_SIZE),
   // The desktop's mixer: a column for the master and one for each app above that makes sound.
   app(
     'VolumeControl',
